@@ -3,7 +3,7 @@
     <type>org.netbeans.modules.cnd.makeproject</type>
     <configuration>
         <data xmlns="http://www.netbeans.org/ns/make-project/1">
-            <name>A4 Sort using a 2-Dimension Array</name>
+            <name>A04 Sort using a 2-Dimension Array</name>
             <c-extensions/>
             <cpp-extensions>cpp</cpp-extensions>
             <header-extensions/>

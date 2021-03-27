@@ -48,12 +48,48 @@ int main(int argc, char** argv) {
     return 0;
 }
 
-void read(int [][COLMAX],int &,int &){
+void read(int array[][COLMAX],int &row,int &col){
+    cout<<"Input a table and output the Augment row,col and total sums.\n";
+    cout<<"First input the number of rows and cols. <20 for each\n";
+    cin>>row>>col;
+    
+    cout<<"Now input the table.\n";
+    for(char i=0;i<row;i++){
+        for(char j=0;j<col;j++){
+            cin>>array[i][j];
+        }
+    }
     
 }
-void sum(const int [][COLMAX],int,int,int[][COLMAX]){
+void sum(const int array[][COLMAX],int row,int col,int augAry[][COLMAX]){
+    for(char i=0;i<row;i++){
+        for(char j=0;j<col;j++){
+            augAry[i][j]=array[i][j];
+        }
+    }
     
+    int tempSum;
+    for(short i=0;i<row;i++){
+        tempSum=0;
+        for(char j=0;j<col;j++){
+            tempSum+=augAry[i][j];
+        }
+        augAry[i][col]=tempSum;
+    }
+    
+    for(char j=0;j<col+1;j++){
+        tempSum=0;
+        for(char i=0;i<row;i++){
+            tempSum+=augAry[i][j];
+        }
+        augAry[row][j]=tempSum;
+    }
 }
-void print(const int [][COLMAX],int,int,int){
-    
+void print(const int array[][COLMAX],int row,int col,int width){
+    for(char i=0;i<row;i++){
+        for(char j=0;j<col;j++){
+            cout<<setw(width)<<array[i][j];
+        }
+        cout<<endl;
+    }
 }

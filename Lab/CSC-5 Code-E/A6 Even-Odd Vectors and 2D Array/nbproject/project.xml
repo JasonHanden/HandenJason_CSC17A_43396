@@ -3,10 +3,11 @@
     <type>org.netbeans.modules.cnd.makeproject</type>
     <configuration>
         <data xmlns="http://www.netbeans.org/ns/make-project/1">
-            <name>A6 Even-Odd Vectors and 2D Array</name>
+            <name>A06 Even-Odd Vectors and 2D Array</name>
             <c-extensions/>
             <cpp-extensions>cpp</cpp-extensions>
             <header-extensions/>
+            <sourceEncoding>UTF-8</sourceEncoding>
             <make-dep-projects/>
             <sourceRootList/>
             <confList>
@@ -19,7 +20,6 @@
                     <type>1</type>
                 </confElem>
             </confList>
-            <sourceEncoding>UTF-8</sourceEncoding>
             <formatting>
                 <project-formatting-style>false</project-formatting-style>
             </formatting>
