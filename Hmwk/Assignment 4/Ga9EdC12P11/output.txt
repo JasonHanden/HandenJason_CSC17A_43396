@@ -1,0 +1,16 @@
+East 1 123
+East 2 123
+East 3 123
+East 4 123
+West 1 123
+West 2 123
+West 3 123
+West 4 123
+North 1 123
+North 2 123
+North 3 123
+North 4 123
+South 1 123
+South 2 123
+South 3 123
+South 4 123
