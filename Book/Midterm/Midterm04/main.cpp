@@ -37,10 +37,8 @@ int main(int argc, char** argv) {
         input4(data);
         decrypt(data,shift);
         output4(shift);
-    }else{
-
     }
-
+    
     return 0;
 }
 

@@ -43,11 +43,23 @@ int main(int argc, char** argv) {
 
 Primes *factor(int input){
     char power;
-    char counter=0;
+    short counter=0;
+    int testVal=input;
     Primes *primes=new Primes;
-    Prime *prime = new Prime[7];
+    primes->nPrimes=0;
+    
+    for(short i=2;i<10000;i++){
+        if(testVal%i==0){
+            while(testVal%i==0){
+                testVal/=i;
+            }
+            primes->nPrimes++;
+        }
+    }
+    
+    Prime *prime = new Prime[primes->nPrimes];
     primes->prime=prime;
-
+    
     for(short i=2;i<10000;i++){
         power=0;
         if(input%i==0){
@@ -60,7 +72,6 @@ Primes *factor(int input){
             counter++;
         }
     }   
-    primes->nPrimes=counter;
     return primes;
 }
 void prntPrm(Primes *primes){

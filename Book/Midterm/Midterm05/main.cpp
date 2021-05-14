@@ -13,7 +13,7 @@
 using namespace std;
 
 int main(int argc, char** argv) {
-/*
+
     char character=1;
     unsigned char unsigChar=1;
     short shortInt=1;
@@ -23,9 +23,9 @@ int main(int argc, char** argv) {
     float floating=1;
     double doubleFloat=1;
     
-    int n=22;
+    int n=171;
     
-    for(char i=1;i<=n;i++){
+    for(int i=1;i<=n;i++){
         character*=i;
         unsigChar*=i;
         shortInt*=i;
@@ -43,10 +43,11 @@ int main(int argc, char** argv) {
     cout<<" unsigShort:"<< unsigShort<<endl;
     cout<<" integer:"<<integer <<endl;
     cout<<" unsigInt:"<<unsigInt <<endl;
-    cout<<" floating:"<<fixed<<floating <<endl;
-    cout<<" doubleFloat:"<<fixed<<doubleFloat <<endl;
-*/
-    cout<<"The highest n for n! for the following data types:\n"
+    cout<<" floating:"<<floating <<endl;
+    cout<<" doubleFloat:"<<doubleFloat <<endl;
+
+/*
+    cout<<"The highest n for which n! can be calculated for the following data types:\n"
         <<" char              n=5\n"
         <<" unsigned char     n=5\n"
         <<" short             n=7\n"
@@ -55,7 +56,7 @@ int main(int argc, char** argv) {
         <<" unsigned int      n=12\n"
         <<" float             n=13\n"
         <<" double            n=22\n";
-    
+*/    
     
     return 0;
 }

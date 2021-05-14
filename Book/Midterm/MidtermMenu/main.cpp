@@ -22,7 +22,9 @@ struct Account1{
     char accNumb[6]={0,0,0,0,0,0};
     float begBal=0;
     float chckOut=0;
+    float *eachChk;
     float deposIn=0;
+    float *eachDep;
 };
 void input(Account1*);
 float balanceCalc(Account1*);
@@ -117,10 +119,13 @@ void prblm1(){
     balance=balanceCalc(account1);
     output(account1,balance);
 
+    delete account1->eachChk;
+    delete account1->eachDep;
     delete account1;
 }
 void input(Account1 *account1){
     float temp=0;
+    short size=0;
     
     cin.ignore();
     cout<<"Please enter your name: ";
@@ -136,22 +141,27 @@ void input(Account1 *account1){
     cout<<"Please enter the account balance at the beginning of the month: ";
     cin>>account1->begBal;
     
-    cout<<"Please enter the checks written out this month: \n";
-    cout<<"(Enter -1 to continue...)";
-    do{
-        cin>>temp;
-        if(int(temp)!=-1){
-            account1->chckOut+=temp;
-        }
-    }while(int(temp)!=-1);
-    cout<<"Please enter the deposits to the account this month: \n";
-    cout<<"(Enter -1 to continue...)";
-    do{
-        cin>>temp;
-        if(int(temp)!=-1){
-            account1->deposIn+=temp;
-        }
-    }while(int(temp)!=-1);
+    cout<<"Please enter the number of checks written out this month: ";
+    cin>>size;
+    float *eachChk=new float[size];
+    account1->eachChk=eachChk;
+    
+    for(short i=0;i<size;i++){
+        cout<<"Enter Check #"<<i+1<<": $";
+        cin>>account1->eachChk[i];
+        account1->chckOut+=account1->eachChk[i];
+    }
+    
+    cout<<"Please enter the number of deposits this month: ";
+    cin>>size;
+    float *eachDep=new float[size];
+    account1->eachDep=eachDep;
+    
+    for(short i=0;i<size;i++){
+        cout<<"Enter Deposit #"<<i+1<<": $";
+        cin>>account1->eachDep[i];
+        account1->deposIn+=account1->eachDep[i];
+    }
     
 }
 float balanceCalc(Account1 *account1){
@@ -178,7 +188,7 @@ void output(Account1 *account1,float balance){
         <<"Account Number: "<<account1->accNumb<<endl
         <<"Account Balance at Month Beginning: "<<fixed<<setprecision(2)<<account1->begBal<<" dollars.\n"
         <<"Total of Checks Written: "<<account1->chckOut<<" dollars.\n"
-        <<"Total Account1 Deposits: "<<account1->deposIn<<" dollars.\n"
+        <<"Total Account Deposits: "<<account1->deposIn<<" dollars.\n"
         <<"Current Account Balance (including fees): "<<balance<<" dollars.\n";
 }
 void accNumbCheck(char accNumb[]){
@@ -433,9 +443,8 @@ void prblm4(){
         input4(data);
         decrypt(data,shift);
         output4(shift);
-    }else{
-
     }
+    
 }
 void input4(char data[]){
     cout<<"Please enter the string of four digits to encrypt/decrypt, 0-7: ";
@@ -506,7 +515,7 @@ void inValidation(char data[]){
 
 // PROBLEM 5 BEGIN
 void prblm5(){
-    cout<<"The highest n for n! for the following data types:\n"
+    cout<<"The highest n for which n! can be calculated for the following data types:\n"
         <<" char              n=5\n"
         <<" unsigned char     n=5\n"
         <<" short             n=7\n"
@@ -522,16 +531,16 @@ void prblm5(){
 void prblm6(){
     cout<<"See attached image for work:\n"
         <<"  2.875(base10) = 10.111(base2), 2.7(base8), 2.E(base16)\n"
-        <<"  2.875(base10) to NASA format: 5C0000FE \n\n"
+        <<"  2.875(base10) to NASA format: 5C000002 \n\n"
         <<"  .1796875(base10) = .0010111(base2), .134(base8), .2E(base16)\n"
-        <<"  .1796875(base10) to NASA format: 5C000002 \n\n"
+        <<"  .1796875(base10) to NASA format: 5C0000FE \n\n"
         <<"  -2.875(base10) = -10.111(base2), -2.7(base8), -2.E(base16)\n"
-        <<"  -2.875(base10) to NASA format: A40000FE \n\n"
+        <<"  -2.875(base10) to NASA format: A4000002 \n\n"
         <<"  -.1796875(base10) = -.0010111(base2), -.134(base8), -.2E(base16)\n"
-        <<"  -.1796875(base10) to NASA format: A4000002 \n\n"
+        <<"  -.1796875(base10) to NASA format: A40000FE \n\n"
         <<"  59999901(NASA) = 1.4(base10)\n"
         <<"  59999902(NASA) = 2.8(base10)\n"
-        <<"  A66667FE(NASA) = -2.8(base10)\n";
+        <<"  A66667FE(NASA) = -.175(base10)\n";
 }
 // PROBLEM 6 END
 
@@ -554,11 +563,23 @@ void prblm7(){
 }
 Primes *factor(int input){
     char power;
-    char counter=0;
+    short counter=0;
+    int testVal=input;
     Primes *primes=new Primes;
-    Prime *prime = new Prime[7];
+    primes->nPrimes=0;
+    
+    for(short i=2;i<10000;i++){
+        if(testVal%i==0){
+            while(testVal%i==0){
+                testVal/=i;
+            }
+            primes->nPrimes++;
+        }
+    }
+    
+    Prime *prime = new Prime[primes->nPrimes];
     primes->prime=prime;
-
+    
     for(short i=2;i<10000;i++){
         power=0;
         if(input%i==0){
@@ -571,7 +592,6 @@ Primes *factor(int input){
             counter++;
         }
     }   
-    primes->nPrimes=counter;
     return primes;
 }
 void prntPrm(Primes *primes){

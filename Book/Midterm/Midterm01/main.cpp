@@ -18,7 +18,9 @@ struct Account1{
     char accNumb[6]={0,0,0,0,0,0};
     float begBal=0;
     float chckOut=0;
+    float *eachChk;
     float deposIn=0;
+    float *eachDep;
 };
 
 void input(Account1*);
@@ -36,12 +38,15 @@ int main(int argc, char** argv) {
     balance=balanceCalc(account1);
     output(account1,balance);
 
+    delete account1->eachChk;
+    delete account1->eachDep;
     delete account1;
     return 0;
 }
 
 void input(Account1 *account1){
     float temp=0;
+    short size=0;
     
     cout<<"Please enter your name: ";
     getline(cin,account1->name);
@@ -56,22 +61,27 @@ void input(Account1 *account1){
     cout<<"Please enter the account balance at the beginning of the month: ";
     cin>>account1->begBal;
     
-    cout<<"Please enter the checks written out this month: \n";
-    cout<<"(Enter -1 to continue...)";
-    do{
-        cin>>temp;
-        if(int(temp)!=-1){
-            account1->chckOut+=temp;
-        }
-    }while(int(temp)!=-1);
-    cout<<"Please enter the deposits to the account this month: \n";
-    cout<<"(Enter -1 to continue...)";
-    do{
-        cin>>temp;
-        if(int(temp)!=-1){
-            account1->deposIn+=temp;
-        }
-    }while(int(temp)!=-1);
+    cout<<"Please enter the number of checks written out this month: ";
+    cin>>size;
+    float *eachChk=new float[size];
+    account1->eachChk=eachChk;
+    
+    for(short i=0;i<size;i++){
+        cout<<"Enter Check #"<<i+1<<": $";
+        cin>>account1->eachChk[i];
+        account1->chckOut+=account1->eachChk[i];
+    }
+    
+    cout<<"Please enter the number of deposits this month: ";
+    cin>>size;
+    float *eachDep=new float[size];
+    account1->eachDep=eachDep;
+    
+    for(short i=0;i<size;i++){
+        cout<<"Enter Deposit #"<<i+1<<": $";
+        cin>>account1->eachDep[i];
+        account1->deposIn+=account1->eachDep[i];
+    }
     
 }
 float balanceCalc(Account1 *account1){
