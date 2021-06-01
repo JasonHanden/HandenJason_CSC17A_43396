@@ -3,7 +3,7 @@
  * File:   main.cpp
  * Author: Jason Handen
  * Created on May 13, 2021, 1:21 PM
- * Purpose: Project 2 Version 1, adapting Project 1 content
+ * Purpose: Project 2 Version 2, still adapting Project 1 content
  */
 
 #include <iostream>     // for input/output
@@ -12,6 +12,9 @@
 #include <fstream>      // for binary file read/write
 
 #include "Hand.h"
+#include "Banker.h"
+#include "Player.h"
+#include "Round.h"
 
 using namespace std;
 
@@ -29,6 +32,7 @@ struct Hand{
     short sum;
 };
 */
+/*
 struct Round{
     short rndNum;
     short betType;
@@ -36,6 +40,7 @@ struct Round{
     Hand *banker;
     short result;
 };
+*/
 struct Result{
     short rndTot;
     short wins=0;

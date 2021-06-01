@@ -38,6 +38,8 @@ OBJECTFILES= \
 	${OBJECTDIR}/Banker.o \
 	${OBJECTDIR}/Hand.o \
 	${OBJECTDIR}/Player.o \
+	${OBJECTDIR}/Result.o \
+	${OBJECTDIR}/Round.o \
 	${OBJECTDIR}/main.o
 
 
@@ -59,11 +61,11 @@ LDLIBSOPTIONS=
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
-	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/project2_v01.exe
+	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/project2_v03.exe
 
-${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/project2_v01.exe: ${OBJECTFILES}
+${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/project2_v03.exe: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
-	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/project2_v01 ${OBJECTFILES} ${LDLIBSOPTIONS}
+	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/project2_v03 ${OBJECTFILES} ${LDLIBSOPTIONS}
 
 ${OBJECTDIR}/Banker.o: Banker.cpp
 	${MKDIR} -p ${OBJECTDIR}
@@ -79,6 +81,16 @@ ${OBJECTDIR}/Player.o: Player.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Player.o Player.cpp
+
+${OBJECTDIR}/Result.o: Result.cpp
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Result.o Result.cpp
+
+${OBJECTDIR}/Round.o: Round.cpp
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Round.o Round.cpp
 
 ${OBJECTDIR}/main.o: main.cpp
 	${MKDIR} -p ${OBJECTDIR}

@@ -3,7 +3,7 @@
  * File:   main.cpp
  * Author: Jason Handen
  * Created on May 13, 2021, 1:21 PM
- * Purpose: Project 2 Version 1, adapting Project 1 content
+ * Purpose: Project 2 Version 3, Working on Result class, prntPrior and makeResults corrections
  */
 
 #include <iostream>     // for input/output
@@ -12,6 +12,10 @@
 #include <fstream>      // for binary file read/write
 
 #include "Hand.h"
+#include "Banker.h"
+#include "Player.h"
+#include "Round.h"
+#include "Result.h"
 
 using namespace std;
 
@@ -29,6 +33,7 @@ struct Hand{
     short sum;
 };
 */
+/*
 struct Round{
     short rndNum;
     short betType;
@@ -36,21 +41,23 @@ struct Round{
     Hand *banker;
     short result;
 };
+*/
+/*
 struct Result{
     short rndTot;
     short wins=0;
     short losses=0;
 };
-
+*/
 // Function Prototypes
 void prntPrior(char[],char[],ifstream&,ifstream&);// pull bin file data to print
 short promptGame(const short,const short);          // determine rounds to play
-void playBaccarat(Round*);                  // plays the game for a given round
+void playBaccarat(Player,Banker,Round*);            // plays the game for a given round
 short promptBet(const short,const short);           // determine user bet
 void dealCards(Hand*);                  // deal cards (including extra) and sum
 void writeCards(Hand*);                             // write card name to string
 void prntRound(Round*);                             // print round
-Result* makeResult(Round[],const short);             // make Result struct
+void makeResult(Result);             // make Result struct
 void prntResult(Result*);                   // print results
 void binData(Round[],Result*,ofstream&,ofstream&,char[],char[]);// save to binary file
 void memClear(Round*,Result*);                      // deallocate memory
@@ -77,22 +84,25 @@ int main(int argc, char** argv)
     prntPrior(rounds,results,inRnd,inRes);
     
     short rndNumb=promptGame(RNDMIN,RNDMAX);
-    Round *round=new Round[rndNumb];            // new rounds according to input
-    
-    
+    Result result(rndNumb);
+    Player player;
+    Banker banker;
+    /*
     for(short i=0;i<rndNumb;i++){
         Hand *player=new Hand;
         round[i].player=player;                 // assign pointers to rounds  
         Hand *banker=new Hand;
         round[i].banker=banker;                 // assign pointers to rounds
     }
-    
+    */
+
     for(short i=0;i<rndNumb;i++){
-        round[i].rndNum=i+1;
-        playBaccarat(round+i);                  // runs game until complete
+        result.round->setRndNum(i+1);
+        playBaccarat(player,banker,result.round+i);                  // runs game until complete
     }
     
-    Result *result=makeResult(round,rndNumb);
+    makeResult(result);
+
     prntResult(result);
     binData(round,result,outRnd,outRes,rounds,results);
     
@@ -106,11 +116,9 @@ int main(int argc, char** argv)
 
 void prntPrior(char rounds[],char results[],ifstream &inRnd,ifstream &inRes){
     short response=0;
-    Result *result=new Result;
-    Round *round=new Round;
-    Hand *play=new Hand;
-    Hand *bank=new Hand;
-    round->banker=bank;round->player=play;
+    Result result;
+    Player player;
+    Banker banker;
     
     inRnd.open(rounds,ios::binary|ios::in);
     inRes.open(results,ios::binary|ios::in);
@@ -120,62 +128,78 @@ void prntPrior(char rounds[],char results[],ifstream &inRnd,ifstream &inRes){
     }else if(!inRes){
         cout<<"No Result file to open. This must be the first run!\n";
     }else{
-        inRes.read((char*)&result->rndTot,sizeof(short));
-        inRes.read((char*)&result->wins,sizeof(short));
-        inRes.read((char*)&result->losses,sizeof(short));
+        short tempRnd,tempWin,tempLoss;
+        // read in values from file
+        inRes.read((char*)&tempRnd,sizeof(short));
+        inRes.read((char*)&tempWin,sizeof(short));
+        inRes.read((char*)&tempLoss,sizeof(short));
+        // assign values to object
+        result.setRndTot(tempRnd);
+        result.setWins(tempWin);
+        result.setLosses(tempLoss);
+
         cout<<"This was the round total for the last game played: "
-                <<result->rndTot<<endl;
-        cout<<"Total wins for last game: "<<result->wins<<endl;
-        cout<<"Total losses for last game: "<<result->losses<<endl<<endl;
+                <<result.getRndTot()<<endl;
+        cout<<"Total wins for last game: "<<result.getWins()<<endl;
+        cout<<"Total losses for last game: "<<result.getLosses()<<endl<<endl;
         
         do{
             inRnd.seekg(0);
-            cout<<"Choose a round, 1-"<<result->rndTot<<", or 0 (Zero) to exit: ";
+            cout<<"Choose a round, 1-"<<result.getRndTot()<<", or 0 (Zero) to exit: ";
             cin>>response;
-            response=valCheck(response,0,result->rndTot);
             
+            
+            
+            // Check for exception application
+            response=valCheck(response,0,result.getRndTot());
+            
+
+
+
+            short rndNum,betType,res,sumB,sumP;
             for(short i=0;i<response;i++){
-                inRnd.read((char*)&round->rndNum,sizeof(short));
-                inRnd.read((char*)&round->betType,sizeof(short));
-                inRnd.read((char*)&round->result,sizeof(short));
-                inRnd.read((char*)&round->banker->sum,sizeof(short));
-                inRnd.read((char*)&round->player->sum,sizeof(short));
+                inRnd.read((char*)&rndNum,sizeof(short));
+                inRnd.read((char*)&betType,sizeof(short));
+                inRnd.read((char*)&res,sizeof(short));
+                inRnd.read((char*)&sumB,sizeof(short));
+                inRnd.read((char*)&sumP,sizeof(short));
             }
             if(response!=0){
-                cout<<"For Round #"<<round->rndNum<<":\n";
-                if(round->betType==PLAYER){
+                result.round->setRndNum(rndNum);
+                result.round->setBetType(betType);
+                result.round->setResult(res);
+                result.round->setSumBnkr(sumB);
+                result.round->setSumPlyr(sumP);
+
+                cout<<"For Round #"<<result.round->getRndNum()<<":\n";
+                if(result.round->getBetType()==PLAYER){
                     cout<<"Player bet with ";
-                }else if(round->betType==BANKER){
+                }else if(result.round->getBetType()==BANKER){
                     cout<<"Banker bet with ";
                 }else{
                     cout<<"Tie bet with ";
                 }
-                if(round->result==PLAYER){
+                if(result.round->getResult()==PLAYER){
                     cout<<"player win.\n";
-                }else if(round->result==BANKER){
+                }else if(result.round->getResult()==BANKER){
                     cout<<"banker win.\n";
                 }else{
                     cout<<"tie game.\n";
                 }
-                cout<<"Player sum: "<<round->player->sum<<endl;
-                cout<<"Banker sum: "<<round->banker->sum<<endl<<endl;
+                cout<<"Player sum: "<<result.round->getSumPlyr()<<endl;
+                cout<<"Banker sum: "<<result.round->getSumBnkr()<<endl<<endl;
             }
         }while(response!=0);
     }
-    
-    delete round->player;
-    delete round->banker;
-    delete round;
-    delete result;
 }
 short promptGame(const short RNDMIN,const short RNDMAX){
     short rndNumb=0;
     cout<<"\nHow many rounds of Bacarrat would you like to play: ";
     cin>>rndNumb;
-    rndNumb=valCheck(rndNumb,RNDMIN,RNDMAX);
+    
     return rndNumb;
 }
-void playBaccarat(Round *round){
+void playBaccarat(Player player,Banker banker,Round *round){
     round->betType=promptBet(PLAYER,TIE);
     dealCards(round->player);
     dealCards(round->banker);
@@ -372,18 +396,14 @@ void prntRound(Round *round){
     cin.ignore();
     cin.get();
 }
-Result* makeResult(Round round[],const short rndNumb){
-    Result *result=new Result;
-    result->rndTot=rndNumb;
-    
-    for(short i=0;i<result->rndTot;i++){
-        if(round[i].betType==round[i].result){
-            result->wins+=1;
-        }else if(round[i].betType!=round[i].result){
-            result->losses+=1;
+void makeResult(Result result){
+    for(short i=0;i<result.getRndTot();i++){
+        if(result.round[i].getBetType()==result.round[i].getResult()){
+            result.addWin();
+        }else if(result.round[i].getBetType()!=result.round[i].getResult()){
+            result.addLoss();
         }
     }
-    return result;
 }
 void prntResult(Result *result){
     cout<<"\n\nTotal Rounds: "<<result->rndTot<<endl;

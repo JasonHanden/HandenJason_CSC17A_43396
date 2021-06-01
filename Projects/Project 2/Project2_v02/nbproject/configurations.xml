@@ -7,6 +7,7 @@
       <itemPath>Banker.h</itemPath>
       <itemPath>Hand.h</itemPath>
       <itemPath>Player.h</itemPath>
+      <itemPath>Round.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
@@ -18,6 +19,7 @@
       <itemPath>Banker.cpp</itemPath>
       <itemPath>Hand.cpp</itemPath>
       <itemPath>Player.cpp</itemPath>
+      <itemPath>Round.cpp</itemPath>
       <itemPath>main.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
@@ -54,6 +56,10 @@
       </item>
       <item path="Player.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="Round.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Round.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
       </item>
     </conf>
@@ -88,6 +94,10 @@
       <item path="Player.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Player.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Round.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Round.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
       </item>
