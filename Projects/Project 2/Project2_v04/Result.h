@@ -14,7 +14,8 @@ class Result{
     private:
         short rndTot;
         short wins=0;
-        short losses=0;        
+        short losses=0;
+        float player$=0;
     public:
         Round *round;
         class BadRoundCount{};
@@ -26,10 +27,12 @@ class Result{
         short getRndTot();
         short getWins();
         short getLosses();
+        float getPlayer$();
 
         void setRndTot(short);
         void setWins(short);
         void setLosses(short);
+        void setPlayer$(float);
         void addWin();
         void addLoss();
 };

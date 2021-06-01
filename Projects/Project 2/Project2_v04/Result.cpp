@@ -8,6 +8,11 @@
 #include "Result.h"
 #include "Round.h"
 
+
+#include <iostream>
+
+
+
 // constructor for first use
 Result::Result(){
     rndTot=0;
@@ -17,15 +22,25 @@ Result::Result(){
 }
 // constructor for second use
 Result::Result(short s){
-    if(s>0&&s<21){
+    //if(s>0&&s<21){
+
         rndTot=s;
 
+        
+
+        std::cout<<"From Result class, number of rounds is: "<<rndTot<<std::endl;
+
+
+
         Round *rnd = new Round[rndTot];
+        rnd[0].setRndNum(123);
+        rnd[1].setRndNum(321);
         round=rnd;
-    }else{
+        std::cout<<round[0].getRndNum()<<std::endl;
+        std::cout<<round[1].getRndNum()<<std::endl;
+    /*}else{
         throw BadRoundCount();
-    }
-    
+    }*/
 }
 // destructor to clean up dynamic memory allocation
 Result::~Result(){
@@ -44,6 +59,9 @@ short Result::getWins(){
 short Result::getLosses(){
     return losses;
 }
+float Result::getPlayer$(){
+    return player$;
+}
 // SETTERS
 void Result::setRndTot(short t){
     rndTot=t;
@@ -53,6 +71,9 @@ void Result::setWins(short w){
 }
 void Result::setLosses(short l){
     losses=l;
+}
+void Result::setPlayer$(float m){
+    player$=m;
 }
 // adds one to wins category
 void Result::addWin(){

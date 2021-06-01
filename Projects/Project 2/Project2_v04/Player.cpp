@@ -15,7 +15,7 @@ Player::Player(float m){
 }
 
 void Player::drawThird(){
-    // will implement this in future revision
+    trueHit();
 }
         
 float Player::getMoney(){

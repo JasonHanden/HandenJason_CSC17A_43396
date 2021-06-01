@@ -11,9 +11,7 @@
 using namespace std;
 
 // CONSTRUCTOR
-Hand::Hand(){
-    Hand::dealCards();
-}
+Hand::Hand(){}
 // UTILITY FUNCTIONS
 void Hand::dealCards(){
     for(short i=0;i<3;i++){
@@ -75,10 +73,16 @@ void Hand::writeCards(){
 }
 void Hand::sumCards(short a,short b){
     sum = a + b;
+    if(sum>9){
+        sum-=10;
+    }
 }
 // GET FUNCTIONS
 string Hand::getCard(short index){
     return card[index];
+}
+short Hand::getValue(short index){
+    return value[index];
 }
 bool Hand::getNatural(){
     return natural;

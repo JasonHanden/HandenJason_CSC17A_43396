@@ -8,5 +8,5 @@
 #include "Banker.h"
 
 void Banker::drawThird(){
-    // will implement this in a later revision
+    trueHit();
 }
