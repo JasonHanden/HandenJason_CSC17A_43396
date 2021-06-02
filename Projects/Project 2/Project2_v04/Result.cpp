@@ -26,18 +26,8 @@ Result::Result(short s){
 
         rndTot=s;
 
-        
-
-        std::cout<<"From Result class, number of rounds is: "<<rndTot<<std::endl;
-
-
-
         Round *rnd = new Round[rndTot];
-        rnd[0].setRndNum(123);
-        rnd[1].setRndNum(321);
         round=rnd;
-        std::cout<<round[0].getRndNum()<<std::endl;
-        std::cout<<round[1].getRndNum()<<std::endl;
     /*}else{
         throw BadRoundCount();
     }*/

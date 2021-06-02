@@ -52,17 +52,18 @@ struct Result{
 // Function Prototypes
 void prntPrior(char[],char[],ifstream&,ifstream&);// pull bin file data to print
 short promptGame(const short,const short);          // determine rounds to play
-void playBaccarat(Player,Banker,Round*);            // plays the game for a given round
+void playBaccarat(Player*,Banker*,Round*);            // plays the game for a given round
 short promptBet(const short,const short);           // determine user bet
 
 //float promptBetAmnt();                            // prompt for amount to bet
 
 //void dealCards(Hand*);                            // deal cards (including extra) and sum
 //void writeCards(Hand*);                           // write card name to string
-void prntRound(Player,Banker,Round*);               // print round
-void setResult(Result);                             // set up data in Result object
-void prntResult(Result);                            // print results
-void binData(Result,ofstream&,ofstream&,char[],char[]);// save to binary file
+void prntRound(Player*,Banker*,Round*);               // print round
+void setResult(Result*);                             // set up data in Result object
+void prntResult(Result*);                            // print results
+void binData(Result*,ofstream&,ofstream&,char[],char[]);// save to binary file
+void memClear(Player*,Banker*);
 short valCheck(short,const short, const short);     // input validation
 
 int main(int argc, char** argv)
@@ -87,8 +88,9 @@ int main(int argc, char** argv)
     
     short rndNumb=promptGame(RNDMIN,RNDMAX);
     Result result(rndNumb);
-    Player player;
-    Banker banker;
+    Result *res=&result;
+    Player *player = new Player;
+    Banker *banker = new Banker;
     /*
     for(short i=0;i<rndNumb;i++){
         Hand *player=new Hand;
@@ -109,15 +111,17 @@ int main(int argc, char** argv)
     
     cout<<"Out of FOR loop";
 
-    setResult(result);
+    setResult(res);
 
-    prntResult(result);
-    binData(result,outRnd,outRes,rounds,results);
+    prntResult(res);
+    binData(res,outRnd,outRes,rounds,results);
     
     inRes.close();                              // close file input
     inRnd.close();                              // close file input
     outRes.close();                             // close file output
     outRnd.close();                             // close file output
+
+
 
     return 0;
 }
@@ -207,44 +211,46 @@ short promptGame(const short RNDMIN,const short RNDMAX){
     
     return rndNumb;
 }
-void playBaccarat(Player player,Banker banker,Round *round){
-    round->setBetType( promptBet(PLAYER,TIE) );
+void playBaccarat(Player *player,Banker *banker,Round *round){
+    round->setBetType( 1 );
+    
+    //promptBet(PLAYER,TIE) );
     //round->setBetAmnt( promptBetAmnt() );
-    player.dealCards();
-    banker.dealCards();
+    player->dealCards();
+    banker->dealCards();
     
     // if player's sum less than 6, draw third card, add to sum
-    if(player.getNatural()==false&&banker.getNatural()==false){
-        if(player.getSum()<6){
-            player.drawThird();
+    if(player->getNatural()==false&&banker->getNatural()==false){
+        if(player->getSum()<6){
+            player->drawThird();
         }
     }
     
     // run through banker conditions for drawing
-    if(player.getNatural()==false&&banker.getNatural()==false){
-        if(player.getHit()==false&&banker.getSum()<6){
-            banker.trueHit();
-        }else if(player.getHit()==false&&banker.getSum()>5){
+    if(player->getNatural()==false&&banker->getNatural()==false){
+        if(player->getHit()==false&&banker->getSum()<6){
+            banker->trueHit();
+        }else if(player->getHit()==false&&banker->getSum()>5){
             // banker stands
-        }else if(banker.getSum()<3){
-            banker.trueHit();
-        }else if(player.getHit()==true&&banker.getSum()==3
-                &&player.getValue(2)!=8){
-            banker.trueHit();
-        }else if(player.getHit()==true&&banker.getSum()==4
-                &&player.getValue(2)>1&&player.getValue(2)<8){
-            banker.trueHit();
-        }else if(player.getHit()==true&&banker.getSum()==5
-                &&player.getValue(2)>3&&player.getValue(2)<8){
-            banker.trueHit();
-        }else if(player.getHit()==true&&banker.getSum()==6
-                &&player.getValue(2)>5&&player.getValue(2)<8){
-            banker.trueHit();
+        }else if(banker->getSum()<3){
+            banker->trueHit();
+        }else if(player->getHit()==true&&banker->getSum()==3
+                &&player->getValue(2)!=8){
+            banker->trueHit();
+        }else if(player->getHit()==true&&banker->getSum()==4
+                &&player->getValue(2)>1&&player->getValue(2)<8){
+            banker->trueHit();
+        }else if(player->getHit()==true&&banker->getSum()==5
+                &&player->getValue(2)>3&&player->getValue(2)<8){
+            banker->trueHit();
+        }else if(player->getHit()==true&&banker->getSum()==6
+                &&player->getValue(2)>5&&player->getValue(2)<8){
+            banker->trueHit();
         }
     }
-    if(player.getSum() > banker.getSum()){
+    if(player->getSum() > banker->getSum()){
         round->setResult(PLAYER);
-    }else if(player.getSum() < banker.getSum()){
+    }else if(player->getSum() < banker->getSum()){
         round->setResult(BANKER);
     }else{
         round->setResult(TIE);
@@ -329,31 +335,31 @@ void writeCards(Hand *hand){
     }
 }
 */
-void prntRound(Player player,Banker banker,Round *round){
+void prntRound(Player *player,Banker *banker,Round *round){
     const short WIDTH=25;
     
     cout<<"*****\n";
     cout<<setw(WIDTH)<<left<<"Player"<<setw(WIDTH)<<"Banker"<<endl;
-    cout<<setw(WIDTH)<<left<<player.getCard(0)
-            <<setw(WIDTH)<<left<<banker.getCard(0)<<endl;
-    cout<<setw(WIDTH)<<left<<player.getCard(1)
-            <<setw(WIDTH)<<left<<banker.getCard(1)<<endl;
+    cout<<setw(WIDTH)<<left<<player->getCard(0)
+            <<setw(WIDTH)<<left<<banker->getCard(0)<<endl;
+    cout<<setw(WIDTH)<<left<<player->getCard(1)
+            <<setw(WIDTH)<<left<<banker->getCard(1)<<endl;
 
-    if(player.getHit()==true){
-        cout<<setw(WIDTH)<<left<<player.getCard(2);
-        if(banker.getHit()==true){
-            cout<<setw(WIDTH)<<left<<banker.getCard(2);
+    if(player->getHit()==true){
+        cout<<setw(WIDTH)<<left<<player->getCard(2);
+        if(banker->getHit()==true){
+            cout<<setw(WIDTH)<<left<<banker->getCard(2);
         }
         cout<<endl;
-    }else if(banker.getHit()==true){
-        cout<<setw(WIDTH)<<" "<<setw(WIDTH)<<left<<banker.getCard(2)<<endl;
+    }else if(banker->getHit()==true){
+        cout<<setw(WIDTH)<<" "<<setw(WIDTH)<<left<<banker->getCard(2)<<endl;
     }
     
-    cout<<setw(WIDTH-5)<<left<<"Sum: "<<player.getSum()<<"    "
-            <<setw(WIDTH-5)<<left<<"Sum: "<<banker.getSum()<<endl;
-    if(player.getSum() > banker.getSum()){
+    cout<<setw(WIDTH-5)<<left<<"Sum: "<<player->getSum()<<"    "
+            <<setw(WIDTH-5)<<left<<"Sum: "<<banker->getSum()<<endl;
+    if(player->getSum() > banker->getSum()){
         cout<<setw(WIDTH)<<left<<"WINNER"<<endl;
-    }else if(player.getSum() < banker.getSum()){
+    }else if(player->getSum() < banker->getSum()){
         cout<<setw(WIDTH)<<"  "<<setw(WIDTH)<<left<<"WINNER"<<endl;
     }else{
         cout<<setw(WIDTH)<<left<<"TIE"<<setw(WIDTH)<<left<<"TIE"<<endl;
@@ -369,27 +375,27 @@ void prntRound(Player player,Banker banker,Round *round){
 
     cout<<"After CIN.GET and all\n";
 }
-void setResult(Result result){
-    for(short i=0;i<result.getRndTot();i++){
-        if(result.round[i].getBetType()==result.round[i].getResult()){
-            result.addWin();
-        }else if(result.round[i].getBetType()!=result.round[i].getResult()){
-            result.addLoss();
+void setResult(Result *result){
+    for(short i=0;i<result->getRndTot();i++){
+        if(result->round[i].getBetType()==result->round[i].getResult()){
+            result->addWin();
+        }else if(result->round[i].getBetType()!=result->round[i].getResult()){
+            result->addLoss();
         }
     }
 }
-void prntResult(Result result){
-    cout<<"\n\nTotal Rounds: "<<result.getRndTot()<<endl;
-    cout<<"Won bets: "<<result.getWins()<<endl;
-    cout<<"Lost bets: "<<result.getLosses()<<endl;
+void prntResult(Result *result){
+    cout<<"\n\nTotal Rounds: "<<result->getRndTot()<<endl;
+    cout<<"Won bets: "<<result->getWins()<<endl;
+    cout<<"Lost bets: "<<result->getLosses()<<endl;
 }
-void binData(Result result,ofstream &outRnd, ofstream &outRes,
+void binData(Result *result,ofstream &outRnd, ofstream &outRes,
         char rounds[],char results[]){
     outRes.open(results,ios::binary|ios::out);
 
-    short tempTot=result.getRndTot();
-    short tempWins=result.getWins();
-    short tempLosses=result.getLosses();
+    short tempTot=result->getRndTot();
+    short tempWins=result->getWins();
+    short tempLosses=result->getLosses();
 
     outRes.write((char*)&tempTot,sizeof(short));
     outRes.write((char*)&tempWins,sizeof(short));
@@ -399,12 +405,12 @@ void binData(Result result,ofstream &outRnd, ofstream &outRes,
 
 
     outRnd.open(rounds,ios::binary|ios::out);
-    for(short i=0;i<result.getRndTot();i++){
-        tempRndNum=result.round[i].getRndNum();
-        tempBetType=result.round[i].getBetType();
-        tempResult=result.round[i].getResult();
-        tempSumB=result.round[i].getSumBnkr();
-        tempSumP=result.round[i].getSumPlyr();
+    for(short i=0;i<result->getRndTot();i++){
+        tempRndNum=result->round[i].getRndNum();
+        tempBetType=result->round[i].getBetType();
+        tempResult=result->round[i].getResult();
+        tempSumB=result->round[i].getSumBnkr();
+        tempSumP=result->round[i].getSumPlyr();
 
         outRnd.write((char*)&tempRndNum,sizeof(short));
         outRnd.write((char*)&tempBetType,sizeof(short));
@@ -413,7 +419,11 @@ void binData(Result result,ofstream &outRnd, ofstream &outRes,
         outRnd.write((char*)&tempSumP,sizeof(short));
     }
 }
-
+void memClear(Player *player,Banker *banker){
+    
+    delete player;
+    delete banker;
+}
 short valCheck(short value,const short MIN,const short MAX){
     while(value<MIN || value>MAX){
         cout<<"Please choose a valid entry between "<<MIN<<" and "<<MAX<<": ";
