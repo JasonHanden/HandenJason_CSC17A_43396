@@ -126,14 +126,7 @@ Result& prntPrior(Result *temp,char rounds[],char results[],ifstream &inRnd,ifst
         inRes.read((char*)&tempLoss,sizeof(short));
         inRes.read((char*)&tempS$,sizeof(short));
         inRes.read((char*)&tempE$,sizeof(short));
-        // assign values to object          
-/*
-        result.setRndTot(tempRnd);
-        result.setWins(tempWin);
-        result.setLosses(tempLoss);
-        result.setPlayerS$(tempS$);
-        result.setPlayerE$(tempE$);
-*/
+        // assign values to object
         temp->setRndTot(tempRnd);
         temp->setWins(tempWin);
         temp->setLosses(tempLoss);
