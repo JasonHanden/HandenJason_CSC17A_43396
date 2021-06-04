@@ -46,6 +46,9 @@ public:
    // pop from end of vector
    T pop();
 
+   // push value onto end of vector
+   void push(T);
+
    // Overloaded [] operator declaration
    T &operator[](const int &);
 };
@@ -146,20 +149,34 @@ T SimpleVector<T>::getElementAt(int sub)
 
 template <class T>
 T SimpleVector<T>::pop(){
-    T temp=aptr[arraySize-1];       // for output
-    
-    SimpleVector<T> newVec(int(arraySize-1));   //object to receive copy
+    T *nptr = new T[arraySize-1];   //new pointer of new size
+
+    T temp = aptr[arraySize-1];     //grab value for output
 
     for(short i=0;i<arraySize-1;i++){
-        newVec[i]=aptr[i];          //copy minus end value
+        nptr[i]=aptr[i];            //copy minus end value
     }
-    delete []aptr;
-    aptr=&newVec;
+    
+    arraySize--;                    //store proper array size
+    delete []aptr;                  //clean up memory
+    aptr=nptr;                      //and reassign
     
     return temp;                    // return end value
 }
 
+template <class T>
+void SimpleVector<T>::push(T e){
+    T *nptr = new T[arraySize+1];   //new pointer of new size
 
+    for(short i=0;i<arraySize;i++){
+        nptr[i]=aptr[i];            //copy old values
+    }
+
+    nptr[arraySize]=e;              //copy pushed value to last element
+    arraySize++;                    //store proper array size
+    delete []aptr;                  //clean up memory
+    aptr=nptr;                      //and reassign
+}
 
 
 //*******************************************************
