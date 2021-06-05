@@ -3,7 +3,7 @@
  * File:   main.cpp
  * Author: Jason Handen
  * Created on June 3, 2021, 4:16 PM
- * Purpose: 
+ * Purpose: Problem 1 Driver main
  */
 
 #include <iostream>

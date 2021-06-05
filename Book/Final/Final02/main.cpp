@@ -3,7 +3,7 @@
  * File:   main.cpp
  * Author: Jason Handen
  * Created on June 3, 2021, 4:53 PM
- * Purpose: 
+ * Purpose: Problem 2 Driver main
  */
 
 #include "Prob2Sort.h"

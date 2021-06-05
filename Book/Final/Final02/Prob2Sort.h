@@ -39,7 +39,7 @@ T* Prob2Sort<T>::sortArray(const T *array,int row,bool asc){     //only one colu
     if(asc==false){
         for(short i=0;i<row-1;i++){         //inspiration from CSC-17A
             for(short j=i+1;j<row;j++){
-                if(array[index[i]]<array[index[j]]){
+                if(array[index[i]]>array[index[j]]){
                     temp=index[i];
                     index[i]=index[j];
                     index[j]=temp;
@@ -49,7 +49,7 @@ T* Prob2Sort<T>::sortArray(const T *array,int row,bool asc){     //only one colu
     }else{
         for(short i=0;i<row-1;i++){         //inspiration from CSC-17A
             for(short j=i+1;j<row;j++){
-                if(array[index[i]]>array[index[j]]){
+                if(array[index[i]]<array[index[j]]){
                     temp=index[i];
                     index[i]=index[j];
                     index[j]=temp;
@@ -79,7 +79,7 @@ T* Prob2Sort<T>::sortArray(const T *array,int row,int col,int colSort,bool asc){
     if(asc==false){
         for(short i=0;i<row-1;i++){         //inspiration from CSC-17A
             for(short j=i+1;j<row;j++){
-                if(array[index[i]*col+colSort]<array[index[j]*col+colSort]){
+                if(array[index[i]*col+colSort]>array[index[j]*col+colSort]){
                     temp=index[i];
                     index[i]=index[j];
                     index[j]=temp;
@@ -89,7 +89,7 @@ T* Prob2Sort<T>::sortArray(const T *array,int row,int col,int colSort,bool asc){
     }else{
         for(short i=0;i<row-1;i++){         //inspiration from CSC-17A
             for(short j=i+1;j<row;j++){
-                if(array[index[i]*col+colSort]>array[index[j]*col+colSort]){
+                if(array[index[i]*col+colSort]<array[index[j]*col+colSort]){
                     temp=index[i];
                     index[i]=index[j];
                     index[j]=temp;

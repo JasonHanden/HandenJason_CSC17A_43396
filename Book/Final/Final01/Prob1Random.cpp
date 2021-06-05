@@ -14,13 +14,13 @@ Prob1Random::Prob1Random(const char n,const char *seq){
     srand(static_cast<unsigned int>(time(0)));
     numRand=0;
     nset=n;                         // assign number of vars in sequence
-    set = new char[nset];     // set array for storage
-    freq = new int[nset];      // frequency array
+    set = new char[nset];           // set array for storage
+    freq = new int[nset];           // frequency array
     
     for(short i=0;i<nset;i++){      // assign values over
         set[i]=seq[i];
     }
-    for(short i=0;i<nset;i++){      // assign values over
+    for(short i=0;i<nset;i++){      // initialize to zero
         freq[i]=0;
     }
 }

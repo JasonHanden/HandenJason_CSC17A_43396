@@ -3,14 +3,15 @@
  * File:   main.cpp
  * Author: Jason Handen
  * Created on May 13, 2021, 1:21 PM
- * Purpose: Project 2 Version 7, Monetary Value System
- * Current Line Count: 1014 including classes
+ * Purpose: Project 2 Version 8, STL vectors
+ * Current Line Count: 1050 including classes
  */
 
 #include <iostream>     // for input/output
 #include <iomanip>      // for output formatting
 #include <ctime>        // for rand function
 #include <fstream>      // for binary file read/write
+#include <vector>       // for STL vector stuff
 
 #include "Hand.h"
 #include "Banker.h"
@@ -25,6 +26,7 @@ enum bets{PLAYER=1,BANKER,TIE};
 
 // Function Prototypes
 Result& prntPrior(Result*,char[],char[],ifstream&,ifstream&);  // pull bin file data to print
+vector<char> promptName();                                // prompt user for his name
 short promptGame(const short,const short);          // determine rounds to play
 float promptMoney();                                // prompt user for starting money value
 void playBaccarat(Player*,Banker*,Round*);          // plays the game for a given round
@@ -33,6 +35,7 @@ float promptBetAmnt(const float);                   // prompt for amount to bet
 void adjust$(Player*,Round*);                       // adjusts money values
 void prntRound(Player*,Banker*,Round*);             // print round
 void setResult(Player*,Result*);                    // set up data in Result object
+void prntPlayer(Player*,Result*);                   // print some player data
 void prntResult(Result*,Result*);                   // print results
 void binData(Result*,ofstream&,ofstream&,char[],char[]);// save to binary file
 void memClear(Player*,Banker*);                     // clean up memory allocations
@@ -64,7 +67,8 @@ int main(int argc, char** argv)
     Result pastResult(prntPrior(tempPtr,rounds,results,inRnd,inRes));
     Result *pastRes = &pastResult;
 
-    // determine games to play 
+    // determine games to play
+    vector<char> name=promptName();
     short rndNumb=promptGame(RNDMIN,RNDMAX);
     // (ROUND COUNT OUT OF RANGE) substitute input validation for exception class 
     try{
@@ -74,6 +78,7 @@ int main(int argc, char** argv)
         Player *player = new Player;            // Player object
         Banker *banker = new Banker;            // Banker object
 
+        player->setName(name);
         player->setFMoney(promptMoney());       // set first money
         result.setPlayerS$(player->getMoney()); // store in result object
 
@@ -83,7 +88,8 @@ int main(int argc, char** argv)
         }
 
         setResult(player,res);                      // set Result object w/ data
-        prntResult(res,pastRes);                            // print Result object parts
+        prntPlayer(player,res);                     // print player name
+        prntResult(res,pastRes);                    // print Result object parts
         binData(res,outRnd,outRes,rounds,results);  // output to binary file
 
         memClear(player,banker);                    // memory cleanup
@@ -127,13 +133,6 @@ Result& prntPrior(Result *temp,char rounds[],char results[],ifstream &inRnd,ifst
         inRes.read((char*)&tempS$,sizeof(short));
         inRes.read((char*)&tempE$,sizeof(short));
         // assign values to object          
-/*
-        result.setRndTot(tempRnd);
-        result.setWins(tempWin);
-        result.setLosses(tempLoss);
-        result.setPlayerS$(tempS$);
-        result.setPlayerE$(tempE$);
-*/
         temp->setRndTot(tempRnd);
         temp->setWins(tempWin);
         temp->setLosses(tempLoss);
@@ -197,9 +196,23 @@ Result& prntPrior(Result *temp,char rounds[],char results[],ifstream &inRnd,ifst
 
     return *(temp);
 }
+vector<char> promptName(){
+    string temp;
+    vector<char> name;
+    cout<<"What is your name: ";
+    cin.ignore();
+    getline(cin, temp);
+    for(short i=0;i<temp.size();i++){
+        name.push_back(temp[i]);
+    }
+    
+    cout<<endl<<endl;
+    cout<<"Hello, "<<temp<<"!"<<endl;
+    return name;
+}
 short promptGame(const short RNDMIN,const short RNDMAX){
     short rndNumb=0;
-    cout<<"\nHow many rounds of Bacarrat would you like to play: ";
+    cout<<"How many rounds of Bacarrat would you like to play: ";
     cin>>rndNumb;
     // input validation canceled, exception handling for this case
     return rndNumb;
@@ -354,8 +367,18 @@ void setResult(Player *player, Result *result){
         }
     }
 }
+void prntPlayer(Player *player,Result *result){
+    vector<char> temp=player->getName();
+    char output[temp.size()];
+    for(short i=0;i<temp.size();i++){
+        output[i]=temp[i];
+    }
+    cout<<"\n\nPlayer name: "<<output<<endl;
+    cout<<"Average payout: "<<*(player)/result->getRndTot()<<endl;
+}
 void prntResult(Result *result,Result* pastRes){
-    cout<<"\n\nTotal Rounds: "<<result->getRndTot()<<endl;
+    float avg, pastAvg;
+    cout<<"\nTotal Rounds: "<<result->getRndTot()<<endl;
     cout<<"Won bets: "<<result->getWins()<<endl;
     cout<<"Lost bets: "<<result->getLosses()<<endl;
     cout<<"Starting Money: $"<<fixed<<setprecision(2)<<result->getPlayerS$()<<endl;
