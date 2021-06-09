@@ -15,7 +15,8 @@ using namespace std;
 
 int main(int argc, char** argv) {
 
-    cout<<"Entering problem number 3"<<endl;
+    cout<<"Problem 3: Table and Augmented Table\n";
+    
     int rows=5;
     int cols=6;
     Prob3TableInherited<int> tab("Problem3.txt",rows,cols);
@@ -32,8 +33,6 @@ int main(int argc, char** argv) {
         cout<<endl;
     }
     cout<<endl;
-    
-    
     
     const int *augT=tab.getAugTable();
     for(int i=0;i<=rows;i++)

@@ -14,7 +14,8 @@ using namespace std;
 
 int main(int argc, char** argv) {
 
-    cout<<"The start of Problem 2, the sorting problem"<<endl;
+    cout<<"Problem 2: Sorting\n";
+    
     Prob2Sort<char> rc;
     bool ascending=true;
     ifstream infile;

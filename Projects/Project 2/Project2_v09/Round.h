@@ -8,15 +8,15 @@
 #ifndef ROUND_H
 #define ROUND_H
 
-
+// Round class holds various values, used in an array
 class Round{
     private:
         short rndNum;
         short betType;
-        float betAmnt;
         short sumPlyr;
         short sumBnkr;
         short result;
+        float betAmnt;
         float payout;
     public:
         enum bets{PLAYER=1,BANKER,TIE};

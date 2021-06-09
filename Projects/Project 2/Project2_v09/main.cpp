@@ -4,7 +4,7 @@
  * Author: Jason Handen
  * Created on May 13, 2021, 1:21 PM
  * Purpose: Project 2 Version 9, Final
- * Line Count: 1083 including classes
+ * Line Count: 1081 including classes
  */
 
 #include <iostream>     // for input/output
@@ -39,8 +39,8 @@ void prntPlayer(Player*,Result*);                   // print some player data
 void prntResult(Result*,Result*);                   // print results
 void binData(Player*,Result*,ofstream&,ofstream&,ofstream&,char[],char[],char[]);// save to binary file
 void memClear(Player*,Banker*);                     // clean up memory allocations
-short valCheck(short,const short, const short);     // input validation 1
-float valCheck(float,const short, const float);     // input validation 2
+int valCheck(int,const int, const int);     // input validation 1
+float valCheck(float,const float, const float);     // input validation 2
 
 int main(int argc, char** argv)
 {
@@ -131,12 +131,13 @@ Result& prntPrior(Result *temp,char rounds[],char results[],char play[],
     
     if(!inRnd){
         cout<<"No Round file to open. This must be the first run!\n";
-    }else if(!inRes){
-        cout<<"No Result file to open. This must be the first run!\n";
+    }else if(!inPlay){
+        cout<<"No Player file to open. This must be the first run!\n";
     }else if(!inRes){
         cout<<"No Result file to open. This must be the first run!\n";
     }else{
-        short tempRnd,tempWin,tempLoss,tempS$,tempE$,leng;
+        short tempRnd,tempWin,tempLoss,leng;
+        float tempS$,tempE$;
         // read string from PlayerName file
         string name, s;
         while(inPlay>>s){
@@ -148,8 +149,8 @@ Result& prntPrior(Result *temp,char rounds[],char results[],char play[],
         inRes.read((char*)&tempRnd,sizeof(short));
         inRes.read((char*)&tempWin,sizeof(short));
         inRes.read((char*)&tempLoss,sizeof(short));
-        inRes.read((char*)&tempS$,sizeof(short));
-        inRes.read((char*)&tempE$,sizeof(short));
+        inRes.read((char*)&tempS$,sizeof(float));
+        inRes.read((char*)&tempE$,sizeof(float));
         // assign values to object          
         temp->setRndTot(tempRnd);
         temp->setWins(tempWin);
@@ -221,6 +222,11 @@ vector<char> promptName(){
     cout<<"What is your name: ";
     
     getline(cin, temp);
+    
+    
+    
+    
+    
     for(short i=0;i<temp.size();i++){
         name.push_back(temp[i]);
     }
@@ -249,7 +255,7 @@ void playBaccarat(Player *player,Banker *banker,Round *round){
     cout<<"You have $"<<fixed<<setprecision(2)<<player->getMoney()<<endl;
     round->setBetAmnt( promptBetAmnt(player->getMoney()) );
 
-    Hand *polyTest[]={player,banker};    
+    Hand *polyTest[]={player,banker};           // little polymorphism for show
     for(short i=0;i<2;i++){
         polyTest[i]->dealCards();
     }
@@ -313,7 +319,7 @@ float promptBetAmnt(const float MAX){
     float bet;
     cout<<"How much would you like to bet: ";
     cin>>bet;
-    bet=valCheck(bet,0,MAX);
+    bet=valCheck(bet,0.00,MAX);
     return bet;
 }
 void adjust$(Player *player,Round *round){
@@ -388,11 +394,13 @@ void setResult(Player *player, Result *result){
 }
 void prntPlayer(Player *player,Result *result){
     vector<char> temp=player->getName();
-    char output[temp.size()];
+
+    cout<<"\n\nPlayer name: ";
     for(short i=0;i<temp.size();i++){
-        output[i]=temp[i];
+        cout<<temp[i];
     }
-    cout<<"\n\nPlayer name: "<<output<<endl;
+    cout<<endl;
+    
     cout<<"Average payout: "<<*(player)/result->getRndTot()<<endl;
 }
 void prntResult(Result *result,Result* pastRes){
@@ -402,19 +410,21 @@ void prntResult(Result *result,Result* pastRes){
     cout<<"Lost bets: "<<result->getLosses()<<endl;
     cout<<"Starting Money: $"<<fixed<<setprecision(2)<<result->getPlayerS$()<<endl;
     cout<<"Ending Money: $"<<result->getPlayerE$()<<endl;
+    
+    if(pastRes->getRndTot()!=0){
+        cout<<"---Compared with the prior game---\n";
 
-    cout<<"---Compared with the prior game---\n";
-
-    cout<<"Total Rounds: "<<pastRes->getRndTot()<<endl;
-    cout<<"Won bets: "<<pastRes->getWins()<<endl;
-    cout<<"Lost bets: "<<pastRes->getLosses()<<endl;
-    cout<<"Starting Money: $"<<fixed<<setprecision(2)<<pastRes->getPlayerS$()<<endl;
-    cout<<"Ending Money: $"<<pastRes->getPlayerE$()<<endl<<endl;
+        cout<<"Total Rounds: "<<pastRes->getRndTot()<<endl;
+        cout<<"Won bets: "<<pastRes->getWins()<<endl;
+        cout<<"Lost bets: "<<pastRes->getLosses()<<endl;
+        cout<<"Starting Money: $"<<fixed<<setprecision(2)<<pastRes->getPlayerS$()<<endl;
+        cout<<"Ending Money: $"<<pastRes->getPlayerE$()<<endl<<endl;
+    }
+    
 }
 void binData(Player *player,Result *result,ofstream &outRnd,ofstream &outRes,ofstream &outPlay,
                                                         char rounds[],char results[],char play[]){
     
-
     vector<char> temp=player->getName();
     short leng=temp.size();
     char output[leng];
@@ -427,19 +437,18 @@ void binData(Player *player,Result *result,ofstream &outRnd,ofstream &outRes,ofs
         outPlay<<temp[i];
     }
     
-
     outRes.open(results,ios::binary|ios::out);
     short tempTot=result->getRndTot();
     short tempWins=result->getWins();
     short tempLosses=result->getLosses();
-    short tempS$=result->getPlayerS$();
-    short tempE$=result->getPlayerE$();
+    float tempS$=result->getPlayerS$();
+    float tempE$=result->getPlayerE$();
 
     outRes.write((char*)&tempTot,sizeof(short));
     outRes.write((char*)&tempWins,sizeof(short));
     outRes.write((char*)&tempLosses,sizeof(short));
-    outRes.write((char*)&tempS$,sizeof(short));
-    outRes.write((char*)&tempE$,sizeof(short));
+    outRes.write((char*)&tempS$,sizeof(float));
+    outRes.write((char*)&tempE$,sizeof(float));
     
     // temporary variables for assignment and binary output
     short tempRndNum,tempBetType,tempResult,tempSumB,tempSumP;
@@ -467,14 +476,14 @@ void memClear(Player *player,Banker *banker){
     delete player;
     delete banker;
 }
-short valCheck(short value,const short MIN,const short MAX){
+int valCheck(int value,const int MIN,const int MAX){
     while(value<MIN || value>MAX){
         cout<<"Please choose a valid entry between "<<MIN<<" and "<<MAX<<": ";
         cin>>value;
     }
     return value;
 }
-float valCheck(float value,const short MIN,const float MAX){
+float valCheck(float value,const float MIN,const float MAX){
     while(value<MIN || value>MAX){
         cout<<"Please choose a valid entry between "<<MIN<<" and "<<MAX<<": ";
         cin>>value;

@@ -12,6 +12,9 @@
 using namespace std;
 
 int main() {
+    
+    cout<<"Problem 1: Random Numbers\n";
+    
     char n=5;
     char rndseq[]={18,33,56,79,124};
     int ntimes=100000;
